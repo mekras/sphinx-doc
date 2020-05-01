@@ -1,10 +1,10 @@
 ##
-## Docker image of Sphinx documentation generator.
+## Образ Docker для генератора документации Sphinx.
 ##
 ## See https://github.com/mekras/sphinx-doc
 ##
 
-FROM ubuntu:cosmic
+FROM debian:buster
 
 ## Основные пакеты Sphinx.
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -13,6 +13,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
     python-setuptools \
     python3-sphinx \
     python3-sphinx-rtd-theme \
+    python3-sphinxcontrib.bibtex \
     python3-stemmer \
     sphinx-intl \
     && pip install --upgrade pip \
