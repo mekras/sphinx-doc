@@ -4,49 +4,43 @@
 ## See https://github.com/mekras/sphinx-doc
 ##
 
-FROM debian:buster
+FROM sphinxdoc/sphinx-latexpdf
 
-## Основные пакеты Sphinx.
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    graphviz \
-    python-pip \
-    python-setuptools \
-    python3-sphinx \
-    python3-sphinx-rtd-theme \
-    python3-sphinxcontrib.bibtex \
-    python3-stemmer \
-    sphinx-intl \
-    && pip install --upgrade pip \
-    && hash -r \
-    && pip install --upgrade sphinx-autobuild \
-    && rm -r /var/lib/apt/lists/*
+### Основные пакеты Sphinx.
+#RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+#    python-pip \
+#    python-setuptools \
+#    python3-sphinxcontrib.bibtex \
+#    python3-stemmer \
+#    sphinx-intl \
+#    && pip install --upgrade pip \
+#    && hash -r \
+#    && pip install --upgrade sphinx-autobuild \
+#    && rm -r /var/lib/apt/lists/*
 
-## Отдельно ставим PlantUML, т. к. он тянет много зависимосетй.
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    python3-sphinxcontrib.plantuml \
-    && rm -r /var/lib/apt/lists/*
+RUN set -eux; \
+    mkdir --parents /usr/share/man/man1; \
+    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes -f --no-install-recommends \
+    plantuml \
+    texlive-lang-cyrillic \
+    && rm -r /var/lib/apt/lists/*; \
+    rm --recursive --force /usr/share/man; \
+    pip install \
+        sphinxcontrib-plantuml \
+        sphinx-rtd-theme
 
 ## Пакеты для создания PDF.
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    lmodern \
-    luatex \
-    tex-common \
-    texlive \
-    texlive-binaries \
-    texlive-extra-utils \
-    texlive-fonts-extra \
-    texlive-full \
-    texlive-lang-cyrillic \
-    texlive-latex-base \
-    texlive-latex-base-doc \
-    texlive-latex-extra \
-    texlive-latex-recommended \
-    texlive-luatex \
-    texlive-pstricks \
-    texlive-science \
-    texlive-xetex \
-    ttf-dejavu \
-    && pip install --upgrade pip \
-    && hash -r \
-    && pip install --upgrade sphinx-autobuild \
-    && rm -r /var/lib/apt/lists/*
+#RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+#    lmodern \
+#    luatex \
+#    tex-common \
+#    texlive \
+#    texlive-binaries \
+#    texlive-extra-utils \
+#    texlive-full \
+#    texlive-latex-base \
+#    texlive-latex-base-doc \
+#    texlive-pstricks \
+#    texlive-science \
+#    ttf-dejavu \
+#    && rm -r /var/lib/apt/lists/*
