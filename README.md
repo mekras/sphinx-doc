@@ -5,7 +5,8 @@
 
 - поддержку русского языка;
 - [sphinx-autobuild](https://github.com/executablebooks/sphinx-autobuild);  
-- поддержку [PlantUML](https://plantuml.com/ru/) ([sphinxcontrib-plantuml](https://github.com/sphinx-contrib/plantuml));
+- поддержку [PlantUML](https://plantuml.com/ru/)
+  ([sphinxcontrib-plantuml](https://github.com/sphinx-contrib/plantuml));
 - тему оформления [Read The Docs](https://sphinx-rtd-theme.readthedocs.io/en/stable/).
 
 Рабочая папка Sphinx — `/docs`.
