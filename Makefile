@@ -20,8 +20,8 @@ build:
 
 .PHONY: clean ## Очищает все результаты сборки.
 clean:
-	rm -rf tests/output
-	docker rmi $(IMAGE_NAME)
+	-rm -rf tests/output
+	-docker rmi $(IMAGE_NAME)
 
 .PHONY: tests ## Запускает все тесты собранного образа.
 tests: html-tests pdf-tests
