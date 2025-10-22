@@ -4,7 +4,7 @@
 ## See https://github.com/mekras/sphinx-doc
 ##
 
-FROM sphinxdoc/sphinx-latexpdf:5.0.2
+FROM sphinxdoc/sphinx-latexpdf:5.1.1
 
 RUN set -eux ;\
     mkdir --parents /usr/share/man/man1 ;\
