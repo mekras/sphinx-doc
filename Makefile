@@ -3,7 +3,7 @@
 # Корневая папка проекта.
 PROJECT_DIR ::= $(realpath $(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 
-IMAGE_NAME ::= $(notdir $(PROJECT_DIR))
+IMAGE_NAME ::= $(shell git remote get-url origin | cut -d : -f 2 - | sed 's/.git//'):$(shell git describe --tags --exact-match || echo 'latest')
 
 docker-run-tests = docker run --rm --tty \
 	--user $(shell id -u) \
@@ -23,9 +23,6 @@ clean:
 	-rm -rf tests/output
 	-docker rmi $(IMAGE_NAME)
 
-.PHONY: tests ## Запускает все тесты собранного образа.
-tests: html-tests pdf-tests
-
 .PHONY: html-tests ## Запускает тесты сборки в HTML.
 html-tests: build
 	$(call docker-run-tests,sphinx-build -M html /tests /tests/output/html)
@@ -35,3 +32,10 @@ html-tests: build
 pdf-tests: build
 	$(call docker-run-tests,sphinx-build -M latexpdf /tests /tests/output/pdf)
 	xdg-open tests/output/pdf/latex/document.pdf
+
+.PHONY: push ## Загрузить образ в реестр Докера.
+push: build
+	docker push $(IMAGE_NAME)
+
+.PHONY: tests ## Запускает все тесты собранного образа.
+tests: html-tests pdf-tests
