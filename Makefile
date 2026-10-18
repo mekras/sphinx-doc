@@ -3,7 +3,8 @@
 # Корневая папка проекта.
 PROJECT_DIR ::= $(realpath $(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 
-IMAGE_NAME ::= $(shell git remote get-url origin | cut -d : -f 2 - | sed 's/.git//'):$(shell git describe --tags --exact-match || echo 'latest')
+# Полное имя образа можно переопределить: make build IMAGE_NAME=registry.example/docs:dev
+IMAGE_NAME ?= mekras/sphinx-doc:$(shell git describe --tags --exact-match 2>/dev/null || echo 'latest')
 
 docker-run-tests = docker run --rm --tty \
 	--user $(shell id -u) \
