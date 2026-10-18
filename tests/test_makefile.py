@@ -3,6 +3,7 @@
 import os
 from pathlib import Path
 import shutil
+import shlex
 import subprocess
 import tempfile
 import unittest
@@ -57,6 +58,26 @@ class ImageNameTests(unittest.TestCase):
         self.assert_image("registry.example/docs:environment", env=env)
         self.assert_image("registry.example/docs:argument",
                           "IMAGE_NAME=registry.example/docs:argument", env=env)
+
+
+class TemplateImageTests(unittest.TestCase):
+    def test_all_commands_use_selected_image(self):
+        template = MAKEFILE.parent / "project-template"
+        for image in (None, "registry.example/docs:selected"):
+            for target in ("start-server", "html", "pdf"):
+                with self.subTest(image=image, target=target):
+                    command = ["make", "--no-print-directory", "-n", "-C", str(template),
+                               target, "TARGET_DIR_UID=1000", "TARGET_DIR_GID=1000"]
+                    if image:
+                        command.append(f"SPHINX_DOCKER_IMAGE={image}")
+                    result = subprocess.run(command, text=True, capture_output=True, timeout=15)
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    lines = result.stdout.replace("\\\n", " ").splitlines()
+                    runs = [shlex.split(line) for line in lines if line.startswith("docker run ")]
+                    self.assertEqual(len(runs), 1, result.stdout)
+                    expected = image or "mekras/sphinx-doc:latest"
+                    entrypoint = "sphinx-autobuild" if target == "start-server" else "make"
+                    self.assertEqual(runs[0][runs[0].index(entrypoint) - 1], expected)
 
 
 if __name__ == "__main__":

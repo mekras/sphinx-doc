@@ -55,7 +55,7 @@ start-server: ## Запускает сервер разработки.
 		--volume $(PROJECT_DIR)/src:/opt/docs:ro \
 		--workdir /opt/docs/pages \
 		--publish '8000:8000' \
-		mekras/sphinx-doc:latest \
+		$(SPHINX_DOCKER_IMAGE) \
 		sphinx-autobuild --host 0.0.0.0 --watch /opt/docs \
 			/opt/docs/pages /var/www/html/pages
 

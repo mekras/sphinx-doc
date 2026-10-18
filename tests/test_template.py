@@ -97,18 +97,17 @@ class TemplateBuildTests(unittest.TestCase):
         self.assertNotIn("image file not readable", self.make("pdf"))
         self.assert_pdf()
 
+        preview_command = ["make", "--no-print-directory", "-n", "start-server"]
+        if image := os.environ.get("SPHINX_TEST_IMAGE"):
+            preview_command.append(f"SPHINX_DOCKER_IMAGE={image}")
         recipe = subprocess.check_output(
-            ["make", "--no-print-directory", "-n", "start-server"],
+            preview_command,
             cwd=self.project, text=True,
         )
         command = shlex.split(recipe.replace("\\\n", " "))
         # Для автоматического запуска нужны свободный порт и отключённый TTY.
         command.remove("--tty")
         command[command.index("--publish") + 1] = "127.0.0.1::8000"
-        # Подстановка образа относится только к тестовой среде.
-        image = os.environ.get("SPHINX_TEST_IMAGE")
-        if image:
-            command[command.index("mekras/sphinx-doc:latest")] = image
         name = f"sphinx-preview-test-{uuid.uuid4().hex}"
         command[2:2] = ["--name", name]
         with tempfile.TemporaryFile(mode="w+") as log:
