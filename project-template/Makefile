@@ -41,8 +41,11 @@ docker-run = docker run --user $(TARGET_DIR_UID):$(TARGET_DIR_GID) --rm \
 all: clean | html pdf ## Собирает все конечные файлы.
 
 .PHONY: clean ## Очищает все результаты сборки.
-clean:
+clean: | $(TARGET_DIR)
 	find $(TARGET_DIR) -depth -mindepth 1 ! -name .gitignore ! -name robots.txt -delete
+
+$(TARGET_DIR):
+	mkdir -p $(TARGET_DIR)
 
 .PHONY: start-server
 start-server: ## Запускает сервер разработки.
@@ -62,7 +65,7 @@ html: | clean ## Собирает документацию в HTML.
 .PHONY:
 pdf: $(TARGET_DIR)/$(DOC_BASENAME).pdf ## Создаёт документ PDF.
 
-$(TARGET_DIR)/$(DOC_BASENAME).pdf:
+$(TARGET_DIR)/$(DOC_BASENAME).pdf: | $(TARGET_DIR)
 	$(call docker-run,make latexpdf,-v $(TARGET_DIR):$(DOCKER_DST_DIR))
 	mv $(TARGET_DIR)/latex/$(DOC_BASENAME).pdf $(TARGET_DIR)/
 	-rm -rf $(TARGET_DIR)/doctrees $(TARGET_DIR)/latex

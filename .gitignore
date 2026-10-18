@@ -1,1 +1,7 @@
 .idea
+
+# Локальные файлы инструментов и результаты сборки
+.agents/skills/
+.codex/agents/
+__pycache__/
+/project-template/htdocs/

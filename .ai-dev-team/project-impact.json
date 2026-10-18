@@ -1,0 +1,542 @@
+{
+  "schema_version": 2,
+  "graph": {
+    "name": "sphinx-doc",
+    "description": "Влияние изменений концепции, образа, шаблона, проверок, документации, решений, правил разработки и лицензии. Установленные проекции APM проверяются аудитом APM отдельно.",
+    "default_facet": "semantic",
+    "unmapped_paths": "block",
+    "ignore": [
+      ".git/**",
+      "apm_modules/**",
+      ".agents/**",
+      ".codex/**"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "concept",
+      "title": "Концепция проекта",
+      "kind": "concept",
+      "semantic_type": "Назначение готовой среды для авторов документации",
+      "authority": "canonical",
+      "representations": [
+        {
+          "path": "README.md",
+          "role": "canonical"
+        }
+      ],
+      "checks": [
+        "ait-docs-concept"
+      ]
+    },
+    {
+      "id": "image",
+      "title": "Образ Sphinx",
+      "kind": "implementation",
+      "semantic_type": "Среда сборки документации Sphinx в Docker",
+      "authority": "canonical",
+      "representations": [
+        {
+          "path": "Dockerfile",
+          "role": "canonical"
+        }
+      ],
+      "checks": [
+        "ait-code-review",
+        "ait-code-testing"
+      ]
+    },
+    {
+      "id": "template",
+      "title": "Шаблон документации",
+      "kind": "implementation",
+      "semantic_type": "Начальный проект и команды работы с документацией",
+      "authority": "canonical",
+      "representations": [
+        {
+          "path": "project-template/**",
+          "role": "canonical"
+        }
+      ],
+      "checks": [
+        "ait-code-review",
+        "ait-interface-design"
+      ]
+    },
+    {
+      "id": "build-tests",
+      "title": "Сборка и проверки образа",
+      "kind": "test",
+      "semantic_type": "Команды сборки и поставки образа и проверка результатов Sphinx",
+      "authority": "supporting",
+      "representations": [
+        {
+          "path": "Makefile",
+          "role": "implementation"
+        },
+        {
+          "path": "tests/**",
+          "role": "verification"
+        }
+      ],
+      "checks": [
+        "ait-code-review",
+        "ait-code-testing"
+      ]
+    },
+    {
+      "id": "user-docs",
+      "title": "Пользовательская документация",
+      "kind": "documentation",
+      "semantic_type": "Инструкции использования и история изменений",
+      "authority": "supporting",
+      "representations": [
+        {
+          "path": "README.md",
+          "role": "navigation"
+        },
+        {
+          "path": "CHANGELOG.md",
+          "role": "supporting"
+        }
+      ],
+      "checks": [
+        "ait-readme",
+        "ait-changelog"
+      ]
+    },
+    {
+      "id": "decisions",
+      "title": "Архитектурные решения",
+      "kind": "decision",
+      "semantic_type": "Причины значимых решений об образе и шаблоне",
+      "authority": "canonical",
+      "representations": [
+        {
+          "path": "docs/ADR/**",
+          "role": "canonical"
+        }
+      ],
+      "checks": [
+        "ait-decisions"
+      ]
+    },
+    {
+      "id": "development",
+      "title": "Правила разработки",
+      "kind": "process",
+      "semantic_type": "Рабочие правила и подключение инструментов агента",
+      "authority": "canonical",
+      "representations": [
+        {
+          "path": "AGENTS.md",
+          "role": "canonical"
+        },
+        {
+          "path": ".ai-dev-team/**",
+          "role": "canonical"
+        },
+        {
+          "path": "apm.yml",
+          "role": "canonical"
+        },
+        {
+          "path": "apm.lock.yaml",
+          "role": "supporting"
+        },
+        {
+          "path": ".gitignore",
+          "role": "supporting"
+        }
+      ],
+      "checks": [
+        "ai-audit-agent-rules",
+        "ai-agents-md-maintenance",
+        "ait-impact-analysis"
+      ]
+    },
+    {
+      "id": "license",
+      "title": "Лицензия проекта",
+      "kind": "other",
+      "semantic_type": "Условия распространения проекта",
+      "authority": "canonical",
+      "representations": [
+        {
+          "path": "LICENSE",
+          "role": "canonical"
+        }
+      ],
+      "checks": [
+        "ait-licensing"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "concept",
+      "to": "image",
+      "relation": "constrains",
+      "facets": [
+        "semantic",
+        "quality"
+      ],
+      "rationale": "Назначение готовой среды определяет область образа, шаблона, проверок, инструкций и решений.",
+      "basis": true
+    },
+    {
+      "from": "concept",
+      "to": "template",
+      "relation": "constrains",
+      "facets": [
+        "semantic",
+        "quality"
+      ],
+      "rationale": "Назначение готовой среды определяет область образа, шаблона, проверок, инструкций и решений.",
+      "basis": true
+    },
+    {
+      "from": "concept",
+      "to": "build-tests",
+      "relation": "constrains",
+      "facets": [
+        "semantic",
+        "quality"
+      ],
+      "rationale": "Назначение готовой среды определяет область образа, шаблона, проверок, инструкций и решений.",
+      "basis": true
+    },
+    {
+      "from": "concept",
+      "to": "user-docs",
+      "relation": "constrains",
+      "facets": [
+        "semantic",
+        "quality"
+      ],
+      "rationale": "Назначение готовой среды определяет область образа, шаблона, проверок, инструкций и решений.",
+      "basis": true
+    },
+    {
+      "from": "concept",
+      "to": "decisions",
+      "relation": "constrains",
+      "facets": [
+        "semantic",
+        "quality"
+      ],
+      "rationale": "Назначение готовой среды определяет область образа, шаблона, проверок, инструкций и решений.",
+      "basis": true
+    },
+    {
+      "from": "decisions",
+      "to": "image",
+      "relation": "informs",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation",
+        "structure"
+      ],
+      "rationale": "Принятые решения об образе и шаблоне могут менять реализацию, проверки и действия пользователя.",
+      "basis": true
+    },
+    {
+      "from": "decisions",
+      "to": "template",
+      "relation": "informs",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation",
+        "structure"
+      ],
+      "rationale": "Принятые решения об образе и шаблоне могут менять реализацию, проверки и действия пользователя.",
+      "basis": true
+    },
+    {
+      "from": "decisions",
+      "to": "build-tests",
+      "relation": "informs",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation",
+        "structure"
+      ],
+      "rationale": "Принятые решения об образе и шаблоне могут менять реализацию, проверки и действия пользователя.",
+      "basis": true
+    },
+    {
+      "from": "decisions",
+      "to": "user-docs",
+      "relation": "informs",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation",
+        "structure"
+      ],
+      "rationale": "Принятые решения об образе и шаблоне могут менять реализацию, проверки и действия пользователя.",
+      "basis": true
+    },
+    {
+      "from": "image",
+      "to": "template",
+      "relation": "configures",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation",
+        "structure"
+      ],
+      "rationale": "Шаблон запускает образ и зависит от установленных команд, расширений, шрифтов и путей.",
+      "basis": false
+    },
+    {
+      "from": "template",
+      "to": "image",
+      "relation": "informs",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation"
+      ],
+      "rationale": "Изменение настроек и команд шаблона требует проверить наличие соответствующих возможностей в образе.",
+      "basis": false
+    },
+    {
+      "from": "image",
+      "to": "build-tests",
+      "relation": "informs",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation",
+        "structure"
+      ],
+      "rationale": "Тесты и команды сборки должны охватывать изменённые возможности и способы запуска.",
+      "basis": false
+    },
+    {
+      "from": "image",
+      "to": "user-docs",
+      "relation": "informs",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation",
+        "structure",
+        "documentation"
+      ],
+      "rationale": "Изменения образа или шаблона могут менять инструкции и требуют оценки записи в журнале изменений.",
+      "basis": false
+    },
+    {
+      "from": "template",
+      "to": "build-tests",
+      "relation": "informs",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation",
+        "structure"
+      ],
+      "rationale": "Тесты и команды сборки должны охватывать изменённые возможности и способы запуска.",
+      "basis": false
+    },
+    {
+      "from": "template",
+      "to": "user-docs",
+      "relation": "informs",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation",
+        "structure",
+        "documentation"
+      ],
+      "rationale": "Изменения образа или шаблона могут менять инструкции и требуют оценки записи в журнале изменений.",
+      "basis": false
+    },
+    {
+      "from": "build-tests",
+      "to": "image",
+      "relation": "verifies",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation"
+      ],
+      "rationale": "Изменение проверок или обнаруженный ими дефект требует сверить реализацию образа и шаблона.",
+      "basis": false
+    },
+    {
+      "from": "build-tests",
+      "to": "template",
+      "relation": "verifies",
+      "facets": [
+        "semantic",
+        "interface",
+        "quality",
+        "reliability",
+        "security",
+        "operation"
+      ],
+      "rationale": "Изменение проверок или обнаруженный ими дефект требует сверить реализацию образа и шаблона.",
+      "basis": false
+    },
+    {
+      "from": "build-tests",
+      "to": "user-docs",
+      "relation": "informs",
+      "facets": [
+        "interface",
+        "operation",
+        "documentation"
+      ],
+      "rationale": "Изменение команд сборки и поставки требует сверить инструкции для пользователя.",
+      "basis": false
+    },
+    {
+      "from": "development",
+      "to": "image",
+      "relation": "governs",
+      "facets": [
+        "semantic",
+        "operation"
+      ],
+      "rationale": "Рабочие правила определяют порядок принятия, реализации, проверки и описания изменений.",
+      "basis": false
+    },
+    {
+      "from": "development",
+      "to": "template",
+      "relation": "governs",
+      "facets": [
+        "semantic",
+        "operation"
+      ],
+      "rationale": "Рабочие правила определяют порядок принятия, реализации, проверки и описания изменений.",
+      "basis": false
+    },
+    {
+      "from": "development",
+      "to": "build-tests",
+      "relation": "governs",
+      "facets": [
+        "semantic",
+        "operation"
+      ],
+      "rationale": "Рабочие правила определяют порядок принятия, реализации, проверки и описания изменений.",
+      "basis": false
+    },
+    {
+      "from": "development",
+      "to": "decisions",
+      "relation": "governs",
+      "facets": [
+        "semantic",
+        "operation"
+      ],
+      "rationale": "Рабочие правила определяют порядок принятия, реализации, проверки и описания изменений.",
+      "basis": false
+    },
+    {
+      "from": "development",
+      "to": "user-docs",
+      "relation": "governs",
+      "facets": [
+        "semantic",
+        "operation"
+      ],
+      "rationale": "Рабочие правила определяют порядок принятия, реализации, проверки и описания изменений.",
+      "basis": false
+    },
+    {
+      "from": "user-docs",
+      "to": "image",
+      "relation": "documents",
+      "facets": [
+        "semantic",
+        "interface"
+      ],
+      "rationale": "Изменение обещанного состава или способа запуска требует проверить его соответствие образу.",
+      "basis": false
+    },
+    {
+      "from": "user-docs",
+      "to": "template",
+      "relation": "documents",
+      "facets": [
+        "semantic",
+        "interface"
+      ],
+      "rationale": "Изменение инструкций или описания шаблона требует сверить команды и настройки шаблона.",
+      "basis": false
+    },
+    {
+      "from": "license",
+      "to": "image",
+      "relation": "constrains",
+      "facets": [
+        "semantic"
+      ],
+      "rationale": "Изменение условий распространения требует проверить поставку образа, шаблона и сведения для пользователей.",
+      "basis": true
+    },
+    {
+      "from": "license",
+      "to": "template",
+      "relation": "constrains",
+      "facets": [
+        "semantic"
+      ],
+      "rationale": "Изменение условий распространения требует проверить поставку образа, шаблона и сведения для пользователей.",
+      "basis": true
+    },
+    {
+      "from": "license",
+      "to": "user-docs",
+      "relation": "constrains",
+      "facets": [
+        "semantic"
+      ],
+      "rationale": "Изменение условий распространения требует проверить поставку образа, шаблона и сведения для пользователей.",
+      "basis": true
+    }
+  ]
+}
