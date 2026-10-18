@@ -52,11 +52,12 @@ $(TARGET_DIR):
 .PHONY: start-server
 start-server: ## Запускает сервер разработки.
 	docker run --rm --tty \
-		--volume $(PROJECT_DIR)/src/pages:/opt/docs:ro \
-		--workdir /opt/docs \
+		--volume $(PROJECT_DIR)/src:/opt/docs:ro \
+		--workdir /opt/docs/pages \
 		--publish '8000:8000' \
 		mekras/sphinx-doc:latest \
-		sphinx-autobuild --host 0.0.0.0 /opt/docs /var/www/html/pages
+		sphinx-autobuild --host 0.0.0.0 --watch /opt/docs \
+			/opt/docs/pages /var/www/html/pages
 
 .PHONY: html
 html: | $(TARGET_DIR) ## Собирает документацию в HTML.
