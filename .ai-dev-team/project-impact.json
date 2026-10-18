@@ -39,6 +39,10 @@
         {
           "path": "Dockerfile",
           "role": "canonical"
+        },
+        {
+          "path": "requirements.txt",
+          "role": "canonical"
         }
       ],
       "checks": [

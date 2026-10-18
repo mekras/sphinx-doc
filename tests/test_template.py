@@ -75,6 +75,18 @@ class TemplateBuildTests(unittest.TestCase):
         self.make("pdf")
         self.assert_pdf()
 
+    def test_plantuml_in_html_and_pdf(self):
+        with (self.project / "src/pages/index.rst").open("a") as page:
+            page.write("\n.. uml::\n\n   Alice -> Bob: Привет\n")
+        for target in ("html", "pdf"):
+            with self.subTest(target=target):
+                output = self.make(target)
+                self.assertNotIn("plantuml: failed", output)
+                self.assertNotIn("plantuml command", output)
+        self.assertTrue(list((self.project / "htdocs/_images").glob("plantuml-*.png")))
+        self.assert_html()
+        self.assert_pdf()
+
     def test_figures_in_builds_and_preview(self):
         def png(red):
             def chunk(kind, data):
