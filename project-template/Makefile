@@ -62,10 +62,8 @@ html: | clean ## Собирает документацию в HTML.
 	mv -f $(TARGET_DIR)/html/* $(TARGET_DIR)/
 	-rm -rf $(TARGET_DIR)/doctrees $(TARGET_DIR)/html
 
-.PHONY:
-pdf: $(TARGET_DIR)/$(DOC_BASENAME).pdf ## Создаёт документ PDF.
-
-$(TARGET_DIR)/$(DOC_BASENAME).pdf: | $(TARGET_DIR)
+.PHONY: pdf
+pdf: | $(TARGET_DIR) ## Создаёт документ PDF.
 	$(call docker-run,make latexpdf,-v $(TARGET_DIR):$(DOCKER_DST_DIR))
 	mv $(TARGET_DIR)/latex/$(DOC_BASENAME).pdf $(TARGET_DIR)/
 	-rm -rf $(TARGET_DIR)/doctrees $(TARGET_DIR)/latex
