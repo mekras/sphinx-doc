@@ -18,8 +18,8 @@ class TemplateBuildTests(unittest.TestCase):
         self.project = Path(self.workspace.name) / "my-docs"
         shutil.copytree(TEMPLATE, self.project, ignore=shutil.ignore_patterns("htdocs"))
 
-    def make(self, target):
-        command = ["make", target]
+    def make(self, *arguments):
+        command = ["make", *arguments]
         if image := os.environ.get("SPHINX_TEST_IMAGE"):
             command.append(f"SPHINX_DOCKER_IMAGE={image}")
         result = subprocess.run(
@@ -44,6 +44,25 @@ class TemplateBuildTests(unittest.TestCase):
     def test_html_from_fresh_copy(self):
         self.make("html")
         self.assert_html()
+
+    def test_parallel_all_and_rebuild_preserve_both_formats(self):
+        self.make("-j2", "all")
+        self.assert_html()
+        self.assert_pdf()
+        obsolete = self.project / "htdocs/obsolete.html"
+        obsolete.write_text("obsolete")
+        self.make("-j2", "all")
+        self.assert_html()
+        self.assert_pdf()
+        self.assertFalse(obsolete.exists())
+
+    def test_html_preserves_existing_pdf(self):
+        self.make("pdf")
+        pdf = self.project / "htdocs/document.pdf"
+        before = pdf.read_bytes()
+        self.make("html")
+        self.assert_html()
+        self.assertEqual(pdf.read_bytes(), before)
 
     def test_pdf_from_fresh_copy(self):
         self.make("pdf")

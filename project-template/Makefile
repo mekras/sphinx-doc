@@ -38,7 +38,9 @@ docker-run = docker run --user $(TARGET_DIR_UID):$(TARGET_DIR_GID) --rm \
 	$(SPHINX_DOCKER_IMAGE) $(1)
 
 .PHONY: all
-all: clean | html pdf ## Собирает все конечные файлы.
+all: clean ## Собирает все конечные файлы.
+	+$(MAKE) html
+	+$(MAKE) pdf
 
 .PHONY: clean ## Очищает все результаты сборки.
 clean: | $(TARGET_DIR)
@@ -57,7 +59,7 @@ start-server: ## Запускает сервер разработки.
 		sphinx-autobuild --host 0.0.0.0 /opt/docs /var/www/html/pages
 
 .PHONY: html
-html: | clean ## Собирает документацию в HTML.
+html: | $(TARGET_DIR) ## Собирает документацию в HTML.
 	$(call docker-run,make html,-v $(TARGET_DIR):$(DOCKER_DST_DIR))
 	mv -f $(TARGET_DIR)/html/* $(TARGET_DIR)/
 	-rm -rf $(TARGET_DIR)/doctrees $(TARGET_DIR)/html
